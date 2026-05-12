@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK Books Studio</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0f;color:#e8e8f0;font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden;}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(10,10,15,0.95);border-bottom:1px solid #1e1e2e;position:sticky;top:0;z-index:100;}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700;color:#e8e8f0;text-decoration:none;}
+.logo-icon{width:32px;height:32px;background:#7c5cfc;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{color:#9090b0;font-size:13px;text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:#e8e8f0;}
+.nav-btn{background:#7c5cfc;color:#fff;border:none;padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:background 0.2s;}
+.nav-btn:hover{background:#a07cfe;}
+
+.hero{min-height:95vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.3);color:#a07cfe;font-size:12px;font-weight:600;letter-spacing:.05em;padding:5px 14px;border-radius:20px;margin-bottom:28px;}
+.badge-dot{width:6px;height:6px;background:#3ddc84;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+h1{font-size:clamp(40px,7vw,76px);font-weight:800;line-height:1.08;background:linear-gradient(135deg,#e8e8f0 0%,#a07cfe 60%,#7c5cfc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;letter-spacing:-.02em;}
+.hero-sub{font-size:18px;color:#9090b0;max-width:560px;line-height:1.7;margin-bottom:40px;}
+.download-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:48px;}
+.dl-btn{display:flex;align-items:center;gap:10px;padding:13px 22px;border-radius:10px;border:none;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.dl-btn.primary{background:#7c5cfc;color:#fff;}
+.dl-btn.primary:hover{background:#a07cfe;transform:translateY(-1px);}
+.dl-btn.outline{background:transparent;color:#e8e8f0;border:1px solid #2a2a3a;}
+.dl-btn.outline:hover{background:#1a1a24;transform:translateY(-1px);}
+.dl-btn.gold{background:#d4a017;color:#1a0e00;}
+.dl-btn.gold:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.dl-btn.demo{background:transparent;color:#a07cfe;border:1px solid rgba(124,92,252,0.4);}
+.dl-btn.demo:hover{background:rgba(124,92,252,0.1);transform:translateY(-1px);}
+.dl-icon{font-size:18px;}
+.dl-info{text-align:left;}
+.dl-title{display:block;font-size:13px;font-weight:700;}
+.dl-sub{display:block;font-size:11px;opacity:.7;}
+.live-badge{background:#3ddc84;color:#0a1a10;font-size:9px;font-weight:800;padding:2px 6px;border-radius:10px;letter-spacing:.05em;margin-left:4px;}
+
+.hero-preview{width:100%;max-width:880px;background:#0f0f1a;border:1px solid #1e1e2e;border-radius:16px;overflow:hidden;}
+.preview-bar{background:#13131a;border-bottom:1px solid #1e1e2e;display:flex;align-items:center;padding:10px 16px;gap:8px;}
+.pbar-dot{width:10px;height:10px;border-radius:50%;}
+.preview-body{display:flex;height:380px;}
+.preview-sidebar{width:155px;background:#13131a;border-right:1px solid #1e1e2e;padding:10px 8px;flex-shrink:0;overflow:hidden;}
+.preview-sidebar-title{font-size:9px;font-weight:700;color:#3a3a50;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;padding:0 4px;}
+.thumb-item{display:flex;align-items:center;gap:6px;padding:5px 6px;border-radius:6px;margin-bottom:3px;cursor:pointer;transition:background .15s;}
+.thumb-item:hover,.thumb-item.active{background:rgba(124,92,252,.15);}
+.thumb-item.active{border:1px solid rgba(124,92,252,.4);}
+.thumb-img{width:32px;height:44px;border-radius:3px;flex-shrink:0;}
+.thumb-num{font-size:9px;color:#5a5a78;}
+.preview-canvas{flex:1;background:#0a0a0f;display:flex;align-items:center;justify-content:center;}
+.preview-page{width:200px;height:290px;border-radius:8px;border:1px solid #1e1e2e;display:flex;align-items:center;justify-content:center;font-size:40px;color:rgba(255,255,255,.06);}
+.preview-right{width:190px;background:#13131a;border-left:1px solid #1e1e2e;padding:12px;flex-shrink:0;}
+.rside-label{font-size:9px;font-weight:700;color:#3a3a50;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.rside-section{margin-bottom:14px;}
+.rside-badge{display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:7px;border:1px solid rgba(212,160,23,.3);background:rgba(212,160,23,.05);}
+.rside-badge-name{font-size:11px;font-weight:700;color:#d4a017;}
+.rside-badge-ext{font-size:9px;color:#5a5a78;}
+.rside-field-label{font-size:9px;color:#5a5a78;margin-bottom:2px;}
+.rside-field-val{background:#0f0f1a;border:1px solid #1e1e2e;border-radius:4px;padding:4px 7px;font-size:10px;color:#9090b0;margin-bottom:5px;}
+.mode-row{display:flex;gap:4px;}
+.mode-btn{flex:1;padding:4px;border-radius:4px;border:1px solid #2a2a3a;background:transparent;color:#5a5a78;font-size:10px;cursor:pointer;font-weight:600;}
+.mode-btn.active{background:rgba(124,92,252,.2);border-color:#7c5cfc;color:#a07cfe;}
+
+section{padding:72px 48px;max-width:1100px;margin:0 auto;}
+.section-label{font-size:11px;font-weight:700;color:#7c5cfc;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
+.section-title{font-size:clamp(28px,4vw,42px);font-weight:800;color:#e8e8f0;line-height:1.2;margin-bottom:14px;}
+.section-sub{font-size:16px;color:#9090b0;max-width:520px;line-height:1.7;}
+
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:40px;}
+.feature-card{background:#0f0f1a;border:1px solid #1e1e2e;border-radius:14px;padding:22px;transition:border-color .2s,transform .2s;}
+.feature-card:hover{border-color:#2a2a4a;transform:translateY(-2px);}
+.feature-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px;}
+.fi-p{background:rgba(124,92,252,.15);}
+.fi-g{background:rgba(212,160,23,.12);}
+.fi-gr{background:rgba(61,220,132,.12);}
+.fi-b{background:rgba(56,189,248,.12);}
+.feature-card h3{font-size:14px;font-weight:700;color:#e8e8f0;margin-bottom:5px;}
+.feature-card p{font-size:12px;color:#6a6a8a;line-height:1.6;}
+
+.formats-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px;}
+.format-card{border-radius:16px;padding:28px;border:1px solid #1e1e2e;background:#0f0f1a;position:relative;overflow:hidden;}
+.format-card.premium{border-color:rgba(212,160,23,.25);}
+.format-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.format-card:not(.premium)::before{background:#7c5cfc;}
+.format-card.premium::before{background:linear-gradient(90deg,#d4a017,#f5c842);}
+.fmt-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:14px;}
+.fmt-badge.basic{background:rgba(124,92,252,.1);border:1px solid rgba(124,92,252,.25);color:#7c5cfc;}
+.fmt-badge.prem{background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.3);color:#d4a017;}
+.format-card h3{font-size:22px;font-weight:800;color:#e8e8f0;margin-bottom:4px;}
+.format-card .ext{font-size:12px;color:#5a5a78;margin-bottom:18px;font-family:monospace;}
+.fmt-feat{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:13px;color:#9090b0;}
+.chk{width:15px;height:15px;border-radius:50%;background:rgba(61,220,132,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:8px;color:#3ddc84;}
+
+.demo-section{background:#0f0f1a;border-top:1px solid #1e1e2e;border-bottom:1px solid #1e1e2e;padding:60px 48px;text-align:center;}
+.demo-card{max-width:700px;margin:32px auto 0;background:#13131a;border:1px solid #1e1e2e;border-radius:16px;overflow:hidden;}
+.demo-card-header{background:#0f0f18;border-bottom:1px solid #1e1e2e;padding:12px 16px;display:flex;align-items:center;gap:8px;}
+.demo-dot{width:10px;height:10px;border-radius:50%;}
+.demo-preview-body{height:220px;display:flex;align-items:center;justify-content:center;background:#0a0a0e;position:relative;}
+.demo-preview-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+.demo-play-btn{background:#7c5cfc;color:#fff;border:none;padding:12px 28px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .2s;}
+.demo-play-btn:hover{background:#a07cfe;}
+
+.books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px;margin-top:40px;}
+.book-card{background:#0f0f1a;border:1px solid #1e1e2e;border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;}
+.book-card:hover{border-color:#2a2a4a;transform:translateY(-3px);}
+.book-cover{height:170px;display:flex;align-items:center;justify-content:center;font-size:44px;}
+.book-info{padding:9px 11px 10px;}
+.book-title{font-size:12px;font-weight:700;color:#e8e8f0;margin-bottom:2px;}
+.book-meta{font-size:10px;color:#5a5a78;}
+.book-dl{display:flex;align-items:center;justify-content:space-between;padding:7px 11px;border-top:1px solid #1e1e2e;}
+.book-dl-btn{font-size:10px;color:#7c5cfc;font-weight:600;cursor:pointer;background:none;border:none;padding:0;text-decoration:none;}
+.book-fmt{font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;}
+.book-fmt.kk{background:rgba(212,160,23,.12);color:#d4a017;}
+.book-fmt.b2{background:rgba(124,92,252,.12);color:#7c5cfc;}
+
+.dl-section{border-top:1px solid #1e1e2e;padding:80px 48px;text-align:center;}
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;max-width:820px;margin:40px auto 0;}
+.dl-card{background:#0f0f1a;border:1px solid #1e1e2e;border-radius:14px;padding:24px;text-align:left;transition:all .2s;}
+.dl-card:hover{border-color:#2a2a4a;transform:translateY(-2px);}
+.dl-card.live{border-color:rgba(61,220,132,.35);}
+.dl-card-os{font-size:28px;margin-bottom:10px;}
+.dl-card-name{font-size:15px;font-weight:700;color:#e8e8f0;margin-bottom:2px;display:flex;align-items:center;gap:8px;}
+.dl-card-format{font-size:11px;color:#5a5a78;margin-bottom:6px;font-family:monospace;}
+.dl-card-size{font-size:10px;color:#3a3a50;margin-bottom:16px;}
+.dl-card-btn{display:flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:7px;padding:10px 16px;font-size:12px;font-weight:700;cursor:pointer;width:100%;transition:all .2s;text-decoration:none;}
+.dl-card-btn.green{background:#1a3a2a;border:1px solid #3ddc84;color:#3ddc84;}
+.dl-card-btn.green:hover{background:#3ddc84;color:#0a1a10;}
+.dl-card-btn.purple{background:#7c5cfc;color:#fff;}
+.dl-card-btn.purple:hover{background:#a07cfe;}
+.dl-card-btn.gold{background:#d4a017;color:#1a0e00;}
+.dl-card-btn.gold:hover{filter:brightness(1.1);}
+.dl-card-btn.dim{background:#1a1a24;border:1px solid #2a2a3a;color:#3a3a50;cursor:not-allowed;}
+.avail-tag{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;}
+.avail-tag.live{background:rgba(61,220,132,.15);color:#3ddc84;}
+.avail-tag.soon{background:rgba(255,255,255,.05);color:#3a3a50;}
+.how-to{background:#0f0f1a;border:1px solid #1e1e2e;border-radius:12px;padding:20px 24px;max-width:820px;margin:24px auto 0;text-align:left;}
+.how-to-title{font-size:11px;font-weight:700;color:#5a5a78;margin-bottom:12px;letter-spacing:.05em;}
+.how-to-steps{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.how-to-step{font-size:12px;color:#6a6a8a;line-height:1.7;}
+.how-to-step strong{color:#e8e8f0;}
+.how-to-step code{background:#1a1a2a;border:1px solid #2a2a3a;border-radius:4px;padding:1px 6px;font-size:11px;color:#a07cfe;font-family:monospace;}
+
+footer{border-top:1px solid #1e1e2e;padding:28px 48px;display:flex;align-items:center;justify-content:space-between;color:#3a3a50;font-size:12px;}
+.footer-links{display:flex;gap:20px;}
+.footer-links a{color:#3a3a50;text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:#9090b0;}
+
+@media(max-width:700px){
+  nav{padding:0 20px;}
+  section{padding:50px 20px;}
+  .formats-row{grid-template-columns:1fr;}
+  .preview-right{display:none;}
+  .how-to-steps{grid-template-columns:1fr;}
+  .demo-section{padding:40px 20px;}
+  footer{flex-direction:column;gap:12px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <div class="logo-icon">📚</div>
+    KK Books Studio
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#formats">Formats</a>
+    <a href="#demo">Demo</a>
+    <a href="#books">Books</a>
+    <a href="#download">Download</a>
+  </div>
+  <a href="#download" class="nav-btn">Download Free</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    v1.0.0 — Linux AppImage Live Now
+  </div>
+  <h1>Create Visual<br>Books Your Way</h1>
+  <p class="hero-sub">A modern desktop app for creating, reading, and sharing image-based books. Manga, comics, artbooks and more.</p>
+
+  <div class="download-row">
+    <a href="Downloads/KKBooksStudio-1_0_0-x86_64.AppImage" class="dl-btn primary">
+      <span class="dl-icon">🐧</span>
+      <div class="dl-info">
+        <span class="dl-title">Download for Linux <span class="live-badge">LIVE</span></span>
+        <span class="dl-sub">.AppImage · 55 MB · free</span>
+      </div>
+    </a>
+    <a href="#download" class="dl-btn outline">
+      <span class="dl-icon">🪟</span>
+      <div class="dl-info">
+        <span class="dl-title">Windows <span style="font-size:10px;color:#3a3a50;font-weight:400;">coming soon</span></span>
+        <span class="dl-sub">.exe installer</span>
+      </div>
+    </a>
+    <a href="kkbooks_studio_revamp.html" class="dl-btn demo">
+      <span class="dl-icon">▶️</span>
+      <div class="dl-info">
+        <span class="dl-title">Try the Demo</span>
+        <span class="dl-sub">Interactive browser preview</span>
+      </div>
+    </a>
+    <a href="#books" class="dl-btn gold">
+      <span class="dl-icon">📖</span>
+      <div class="dl-info">
+        <span class="dl-title">Browse Books</span>
+        <span class="dl-sub">.book2 & .kkBook</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="hero-preview">
+    <div class="preview-bar">
+      <div class="pbar-dot" style="background:#ff5f57"></div>
+      <div class="pbar-dot" style="background:#febc2e"></div>
+      <div class="pbar-dot" style="background:#28c840"></div>
+      <span style="margin-left:8px;font-size:11px;color:#3a3a50;">KK Books Studio — A Trip to the Beach.kkBook</span>
+    </div>
+    <div class="preview-body">
+      <div class="preview-sidebar">
+        <div class="preview-sidebar-title">Pages (10)</div>
+        <div class="thumb-item active"><div class="thumb-img" style="background:#1a1030;border-radius:3px;"></div><div class="thumb-num">#1</div></div>
+        <div class="thumb-item"><div class="thumb-img" style="background:#0d1a20;border-radius:3px;"></div><div class="thumb-num">#2</div></div>
+        <div class="thumb-item"><div class="thumb-img" style="background:#1a1020;border-radius:3px;"></div><div class="thumb-num">#3</div></div>
+        <div class="thumb-item"><div class="thumb-img" style="background:#0d2015;border-radius:3px;"></div><div class="thumb-num">#4</div></div>
+        <div class="thumb-item"><div class="thumb-img" style="background:#201515;border-radius:3px;"></div><div class="thumb-num">#5</div></div>
+        <div class="thumb-item"><div class="thumb-img" style="background:#151a20;border-radius:3px;"></div><div class="thumb-num">#6</div></div>
+      </div>
+      <div class="preview-canvas">
+        <div class="preview-page" id="main-page" style="background:#1a1040;">📚</div>
+      </div>
+      <div class="preview-right">
+        <div class="rside-section">
+          <div class="rside-label">Format</div>
+          <div class="rside-badge"><div style="font-size:14px;">⭐</div><div><div class="rside-badge-name">Premium</div><div class="rside-badge-ext">.kkBook</div></div></div>
+        </div>
+        <div class="rside-section">
+          <div class="rside-label">Metadata</div>
+          <div class="rside-field-label">Title</div><div class="rside-field-val">A Trip to the Beach</div>
+          <div class="rside-field-label">Author</div><div class="rside-field-val">KK Studio</div>
+        </div>
+        <div class="rside-section">
+          <div class="rside-label">Mode</div>
+          <div class="mode-row">
+            <div class="mode-btn active">Single</div>
+            <div class="mode-btn">Double</div>
+          </div>
+        </div>
+        <div class="rside-section">
+          <div class="rside-label">Stats</div>
+          <div style="font-size:10px;color:#5a5a78;line-height:2.1;">Pages: <span style="color:#a07cfe;font-weight:700;">10</span><br>Format: <span style="color:#9090b0;">.kkBook</span><br>Zoom: <span style="color:#9090b0;">100%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="features">
+  <div class="section-label">Features</div>
+  <div class="section-title">Everything you need<br>to create visual books</div>
+  <p class="section-sub">Built for manga creators, comic artists, and visual storytellers.</p>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon fi-p">🖼️</div><h3>Image-based pages</h3><p>Import PNG, JPG, WEBP. Auto-converts for optimal display. Drag & drop for fast workflows.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-g">📑</div><h3>Chapter system</h3><p>Mark chapter starts, add chapter images, navigate with a full chapter manager. .kkBook only.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-gr">🔍</div><h3>Zoom & fullscreen</h3><p>Zoom with mouse wheel or keyboard. Fullscreen reader mode. Click-drag to pan when zoomed in.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-b">📚</div><h3>Book library</h3><p>Browse all your books in a cover grid. Search by title. One click to open any book.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-p">↔️</div><h3>RTL / LTR support</h3><p>Full right-to-left for manga. Flips page spread order automatically. .kkBook only.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-g">⠿</div><h3>Drag-drop reorder</h3><p>Drag thumbnails to reorder pages. Right-click for set as cover, move, or delete.</p></div>
+  </div>
+</section>
+
+<section id="formats">
+  <div class="section-label">Formats</div>
+  <div class="section-title">Two formats,<br>one creator tool</div>
+  <p class="section-sub">Both are portable ZIP archives — open, shareable, and future-proof.</p>
+  <div class="formats-row">
+    <div class="format-card">
+      <div class="fmt-badge basic">📗 Basic</div>
+      <h3>book2</h3>
+      <div class="ext">.book2</div>
+      <div class="fmt-feat"><div class="chk">✓</div>Cover image</div>
+      <div class="fmt-feat"><div class="chk">✓</div>Unlimited pages</div>
+      <div class="fmt-feat"><div class="chk">✓</div>Single & double page mode</div>
+      <div class="fmt-feat"><div class="chk">✓</div>Metadata — title, author, genre</div>
+      <div class="fmt-feat"><div class="chk">✓</div>Tags</div>
+    </div>
+    <div class="format-card premium">
+      <div class="fmt-badge prem">⭐ Premium</div>
+      <h3>kkBook</h3>
+      <div class="ext">.kkBook</div>
+      <div class="fmt-feat"><div class="chk">✓</div>Everything in .book2</div>
+      <div class="fmt-feat"><div class="chk">✓</div>RTL / LTR direction</div>
+      <div class="fmt-feat"><div class="chk">✓</div>Chapter system with images</div>
+      <div class="fmt-feat"><div class="chk">✓</div>Effects system (coming soon)</div>
+      <div class="fmt-feat"><div class="chk">✓</div>Animation system (coming soon)</div>
+    </div>
+  </div>
+</section>
+
+<div class="demo-section" id="demo">
+  <div class="section-label" style="text-align:center;">Interactive Demo</div>
+  <div class="section-title" style="text-align:center;max-width:100%;">Try it right now</div>
+  <p class="section-sub" style="margin:0 auto;text-align:center;">Full interactive demo — create books, add pages, switch modes, all in your browser.</p>
+  <div class="demo-card">
+    <div class="demo-card-header">
+      <div class="demo-dot" style="background:#ff5f57"></div>
+      <div class="demo-dot" style="background:#febc2e"></div>
+      <div class="demo-dot" style="background:#28c840"></div>
+      <span style="margin-left:8px;font-size:11px;color:#3a3a50;">KK Books Studio — Interactive Demo</span>
+    </div>
+    <div class="demo-preview-body">
+      <div style="display:grid;grid-template-columns:120px 1fr;width:100%;height:100%;">
+        <div style="background:#0f0f18;border-right:1px solid #1e1e2e;padding:8px;display:flex;flex-direction:column;gap:4px;">
+          <div style="font-size:8px;color:#2a2a42;font-weight:700;letter-spacing:.08em;margin-bottom:4px;">PAGES</div>
+          <div style="background:rgba(124,92,252,.15);border:1px solid rgba(124,92,252,.4);border-radius:5px;padding:4px 5px;display:flex;gap:4px;align-items:center;"><div style="width:22px;height:30px;background:#1a1030;border-radius:2px;flex-shrink:0;"></div><span style="font-size:8px;color:#7070a0;">#1</span></div>
+          <div style="padding:4px 5px;display:flex;gap:4px;align-items:center;"><div style="width:22px;height:30px;background:#0d1a20;border-radius:2px;flex-shrink:0;"></div><span style="font-size:8px;color:#3a3a58;">#2</span></div>
+          <div style="padding:4px 5px;display:flex;gap:4px;align-items:center;"><div style="width:22px;height:30px;background:#1a1020;border-radius:2px;flex-shrink:0;"></div><span style="font-size:8px;color:#3a3a58;">#3</span></div>
+        </div>
+        <div style="background:#0a0a0e;display:flex;align-items:center;justify-content:center;">
+          <div style="width:120px;height:170px;background:#1a1040;border-radius:6px;border:1px solid #1e1e2e;display:flex;align-items:center;justify-content:center;font-size:30px;color:rgba(255,255,255,.06);">📖</div>
+        </div>
+      </div>
+      <div class="demo-preview-overlay" style="background:rgba(10,10,14,.7);">
+        <a href="kkbooks_studio_revamp.html" class="demo-play-btn">▶ Open Interactive Demo</a>
+        <span style="font-size:11px;color:#5a5a78;">No install required — runs in your browser</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="books">
+  <div class="section-label">Book Library</div>
+  <div class="section-title">Download & share books</div>
+  <p class="section-sub">Community books in .book2 and .kkBook format. Open them directly in KK Books Studio.</p>
+  <div class="books-grid">
+    <div class="book-card">
+      <div class="book-cover" style="background:#1a1040;">🏖️</div>
+      <div class="book-info"><div class="book-title">A Trip to the Beach</div><div class="book-meta">KK Studio · 10 pages</div></div>
+      <div class="book-dl"><a href="Uploaded/Books/A%20Trip%20to%20the%20Beach" class="book-dl-btn">Download</a><span class="book-fmt kk">.kkBook</span></div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background:#1a0010;">🌸</div>
+      <div class="book-info"><div class="book-title">Spring Blossom</div><div class="book-meta">Demo · 6 pages</div></div>
+      <div class="book-dl"><a href="#" class="book-dl-btn">Coming soon</a><span class="book-fmt b2">.book2</span></div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background:#001a10;">🌌</div>
+      <div class="book-info"><div class="book-title">Starfall Chronicles</div><div class="book-meta">Demo · 24 pages</div></div>
+      <div class="book-dl"><a href="#" class="book-dl-btn">Coming soon</a><span class="book-fmt kk">.kkBook</span></div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background:#1a1000;">⚔️</div>
+      <div class="book-info"><div class="book-title">Dragon's Oath</div><div class="book-meta">Demo · 18 pages</div></div>
+      <div class="book-dl"><a href="#" class="book-dl-btn">Coming soon</a><span class="book-fmt kk">.kkBook</span></div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background:#001020;">🤖</div>
+      <div class="book-info"><div class="book-title">Neon City 2099</div><div class="book-meta">Demo · 12 pages</div></div>
+      <div class="book-dl"><a href="#" class="book-dl-btn">Coming soon</a><span class="book-fmt b2">.book2</span></div>
+    </div>
+    <div class="book-card" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:240px;cursor:default;">
+      <div style="font-size:24px;margin-bottom:8px;opacity:.25;">+</div>
+      <div style="font-size:11px;color:#3a3a50;text-align:center;padding:0 12px;">Submit your book to share with the community</div>
+    </div>
+  </div>
+</section>
+
+<div class="dl-section" id="download">
+  <div class="section-label" style="text-align:center;">Download</div>
+  <div class="section-title" style="text-align:center;max-width:100%;">Get KK Books Studio</div>
+  <p class="section-sub" style="margin:0 auto;text-align:center;">Free and open source. No account required.</p>
+  <div class="dl-grid">
+    <div class="dl-card live">
+      <div class="dl-card-os">🐧</div>
+      <div class="dl-card-name">Linux <span class="avail-tag live">LIVE</span></div>
+      <div class="dl-card-format">KKBooksStudio-1_0_0-x86_64.AppImage</div>
+      <div class="dl-card-size">55 MB · x86_64 · Ubuntu / Debian / Arch</div>
+      <a href="Downloads/KKBooksStudio-1_0_0-x86_64.AppImage" class="dl-card-btn green">⬇ Download .AppImage</a>
+    </div>
+    <div class="dl-card">
+      <div class="dl-card-os">🪟</div>
+      <div class="dl-card-name">Windows <span class="avail-tag soon">SOON</span></div>
+      <div class="dl-card-format">KKBooksStudio-1.0.0-setup.exe</div>
+      <div class="dl-card-size">Windows 10 / 11 · 64-bit</div>
+      <button class="dl-card-btn dim" disabled>Coming soon</button>
+    </div>
+    <div class="dl-card">
+      <div class="dl-card-os">▶️</div>
+      <div class="dl-card-name">Browser Demo <span class="avail-tag live">LIVE</span></div>
+      <div class="dl-card-format">kkbooks_studio_revamp.html</div>
+      <div class="dl-card-size">No install · runs in any browser</div>
+      <a href="kkbooks_studio_revamp.html" class="dl-card-btn purple">▶ Open Demo</a>
+    </div>
+    <div class="dl-card">
+      <div class="dl-card-os">🐍</div>
+      <div class="dl-card-name">Source Code <span class="avail-tag live">LIVE</span></div>
+      <div class="dl-card-format">github.com/jryoung201-code/KKBooks</div>
+      <div class="dl-card-size">Python 3.10+ · PyQt5 · Pillow</div>
+      <a href="https://github.com/jryoung201-code/KKBooks" class="dl-card-btn gold">View on GitHub</a>
+    </div>
+  </div>
+  <div class="how-to">
+    <div class="how-to-title">HOW TO RUN ON LINUX</div>
+    <div class="how-to-steps">
+      <div class="how-to-step"><strong>Step 1 — Make executable</strong><br><code>chmod +x KKBooksStudio-1_0_0-x86_64.AppImage</code></div>
+      <div class="how-to-step"><strong>Step 2 — Run it</strong><br><code>./KKBooksStudio-1_0_0-x86_64.AppImage</code><br>Or double-click in your file manager.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div class="logo-icon" style="width:24px;height:24px;font-size:13px;border-radius:6px;">📚</div>
+    <span>KK Books Studio © 2025</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://github.com/jryoung201-code/KKBooks">GitHub</a>
+    <a href="kkbooks_studio_revamp.html">Demo</a>
+    <a href="#formats">Formats</a>
+    <a href="#books">Books</a>
+    <a href="#download">Download</a>
+  </div>
+</footer>
+
+<script>
+const colors=['#1a1030','#0d1a20','#1a1020','#0d2015','#201515','#151a20'];
+document.querySelectorAll('.thumb-item').forEach((item,i)=>{
+  item.addEventListener('click',function(){
+    document.querySelectorAll('.thumb-item').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('main-page').style.background=colors[i];
+  });
+});
+document.querySelectorAll('.mode-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t) t.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
